@@ -12,7 +12,7 @@ inputs:
   cli-version:
     description: 'Choose a CLI version. Versions: https://github.com/simplelocalize/simplelocalize-cli/releases'
     required: true
-    default: '2.2.0'
+    default: '2.9.0'
   api-key:
     description: 'Project API Key'
     required: false
@@ -25,10 +25,10 @@ runs:
   using: 'composite'
   steps:
     - name: "Setup Java"
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: '20'
+        java-version: '21'
     - name: "Print inputs"
       run: |
         echo "command: ${{ inputs.command }}"
@@ -39,6 +39,6 @@ runs:
       run: "curl -o simplelocalize.jar https://get.simplelocalize.io/binaries/${{ inputs.cli-version }}/simplelocalize-cli-${{ inputs.cli-version }}.jar"
       shell: bash
     - name: "Execute SimpleLocalize CLI Command"
-      run: "java -jar simplelocalize.jar ${{ inputs.command }} ${{ inputs.args }}"
+      run: "java -jar simplelocalize.jar ${{ inputs.command }} ${{ inputs.api-key && '--apiKey' }} ${{ inputs.api-key }} ${{ inputs.args }}"
       shell: bash
 
